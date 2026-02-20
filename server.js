@@ -15,16 +15,16 @@ connectDB();
 
 const app = express();
 
-// 🔥 CORS CONFIGURED FOR YOUR FRONTEND
-// app.use(
-//   cors({
-//     origin: "https://smart-habit-tracker-streak-system-f.vercel.app",
-//     credentials: true,
-//   })
-// );
-
-
-app.use(cors('*'));
+// ✅ CORS CONFIGURED FOR FRONTEND + LOCAL
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://smart-habit-tracker-streak-system-f.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
