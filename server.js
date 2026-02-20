@@ -18,7 +18,7 @@ const app = express();
 // 🔥 CORS CONFIGURED FOR YOUR FRONTEND
 app.use(
   cors({
-    origin: "https://smart-habit-tracker-streak-system-f.vercel.app",
+    origin: "https://smart-habit-tracker-streak-system-f.vercel.app/api",
     credentials: true,
   })
 );
