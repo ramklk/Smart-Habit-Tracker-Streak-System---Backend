@@ -11,42 +11,56 @@ const User = require("./models/User");
 const sendReminderEmail = require("./utils/sendEmail");
 const errorHandler = require("./middleware/errorHandler");
 
-connectDB();
-
 const app = express();
 
-// ✅ CORS CONFIGURED FOR FRONTEND + LOCAL
+/* ===============================
+   DATABASE CONNECTION
+================================ */
+connectDB();
+
+/* ===============================
+   CORS CONFIGURATION
+================================ */
 app.use(
   cors({
     origin: [
       "http://localhost:3000",
       "https://smart-habit-tracker-streak-system-f.vercel.app",
-      
-      
     ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
 
+/* ===============================
+   MIDDLEWARE
+================================ */
 app.use(express.json());
 
-// Rate Limiting
+// Rate Limiter (after CORS)
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
 });
 app.use(limiter);
 
-// Routes
+/* ===============================
+   ROUTES
+================================ */
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/habits", require("./routes/habitRoutes"));
 
-// Health Check
+/* ===============================
+   HEALTH CHECK
+================================ */
 app.get("/", (req, res) => {
   res.send("Smart Habit Tracker API Running 🚀");
 });
 
-// Cron Job (7 PM daily)
+/* ===============================
+   CRON JOB (7 PM DAILY)
+================================ */
 cron.schedule("0 19 * * *", async () => {
   try {
     const habits = await Habit.find();
@@ -69,10 +83,12 @@ cron.schedule("0 19 * * *", async () => {
   }
 });
 
+/* ===============================
+   ERROR HANDLER
+================================ */
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+/* ===============================
+   SERVER START
+================================ */
+module.exports = app;
