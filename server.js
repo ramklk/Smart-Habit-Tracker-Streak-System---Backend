@@ -19,8 +19,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
-      "https://smart-habit-tracker-streak-system-f.vercel.app",
+      "http://localhost:5000",
+      
     ],
     credentials: true,
   })
